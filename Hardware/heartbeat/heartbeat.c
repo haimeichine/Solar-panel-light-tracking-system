@@ -85,8 +85,6 @@ void TIM3_IRQHandler(void)
 		QMC5883_Get_Yaw_Angles(&Yaw_Angle);
 //		USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);	//开启中断获取GPS高度角，方位角
 		
-		
-		
 		/*控制*/
 //		Control_Gps();
 //		Get_Can_ADC_Data();
@@ -128,9 +126,9 @@ void TIM3_IRQHandler(void)
 		
 		/*变量*/
 		Yaw_Angle = fmod((int)Yaw_Angle+270,360); 	//当前偏航
-		Pitch_Angle = Pitch_Angle;					//当前俯仰
-		Solar_Azimuth = Solar_Azimuth;				//目标偏航
-		Solar_Altitude = Solar_Altitude;			//目标俯仰
+		Pitch_Angle = Pitch_Angle;									//当前俯仰
+		Solar_Azimuth = Solar_Azimuth;							//目标偏航
+		Solar_Altitude = Solar_Altitude;						//目标俯仰
 		
 		
 		
