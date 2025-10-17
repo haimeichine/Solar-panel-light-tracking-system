@@ -123,9 +123,14 @@ void Serial_UART_Init(USART_TypeDef* uartx,uint32_t BaudRate)
 		USART_Cmd(USART2, ENABLE);
 	}
 }
-
+//char Serial3_RxPacket[75] = {"$GNRMC,084852.000,A,2424.8014, N,10932.1154, E,0.53,292.44,141216,,,A*7"};
+//char Serial3_RxPacket[75] = {"$GNRMC,013033.000,A,2424.29797,N,10931.90133,E,0.00,204.81,040625,,,A*78"};
 static uint8_t Stare_Index = 0;
 static char Usart2_GPS_Data_Buff[100];
+//static char mytestbuff[100] = {"$GNRMC,21700.000,A,2424.35173,N,10931.91035,E,15.96,225.84,230725,,,A*4A"};//Ñ§Ð£
+//static char mytestbuff[100] = {"$GNRMC,081713.000,A,2417.27638,N,10928.24800,E,2.83,53.36,230725,,,A*43"};//³§
+//
+
 #include <string.h>
 #include <stdlib.h>
 #include "can.h"
@@ -187,4 +192,10 @@ void USART2_IRQHandler(void){
 		}
 	}
 }
-
+//void USART2_IRQHandler(void){
+//	if (USART_GetITStatus(USART2, USART_IT_RXNE) == SET){
+//		USART_ClearITPendingBit(USART2, USART_IT_RXNE);
+//		uint8_t UsartData = USART_ReceiveData(USART2);
+//		
+//	}
+//}

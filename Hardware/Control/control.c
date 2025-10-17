@@ -37,13 +37,40 @@ void Control_Gps(void){
 	uint8_t Yaw_stop = 2;
 	uint8_t Pitch_stop = 2;
 	//偏航Yaw
-	if(Solar_Azimuth > Yaw_Angle + Yaw_stop){	Yaw_Motor_Rigth(Pitch_SPEED);}
-	else if(Solar_Azimuth < Yaw_Angle - Yaw_stop){Yaw_Motor_Left(Pitch_SPEED);}
-	else{Yaw_Motor_Stop();}
+	if(Solar_Azimuth > Yaw_Angle + Yaw_stop){
+//		printf("大");
+//		printf("\n");
+		
+		Yaw_Motor_Rigth(Pitch_SPEED);
+	}else if(Solar_Azimuth < Yaw_Angle - Yaw_stop){
+//		printf("小");
+//		printf("\n");
+		Yaw_Motor_Left(Pitch_SPEED);
+	}else{
+//		printf("Stop");
+//		printf("\n");
+		Yaw_Motor_Stop();
+	}
 	//俯仰Pitch，&& Pitch_Angle > 26，&& Pitch_Angle < 79
-	if(Solar_Altitude > Pitch_Angle + Pitch_stop ){Pitch_Motor_Rigth(Pitch_SPEED);
-	}else if(Solar_Altitude < Pitch_Angle - Pitch_stop ){Pitch_Motor_Left(Pitch_SPEED);
-	}else{Pitch_Motor_Stop();}
+	if(Solar_Altitude > Pitch_Angle + Pitch_stop ){
+		Pitch_Motor_Rigth(Pitch_SPEED);
+	}else if(Solar_Altitude < Pitch_Angle - Pitch_stop ){
+		Pitch_Motor_Left(Pitch_SPEED);
+	}else{
+		Pitch_Motor_Stop();
+	}
+			/*变量*/
+//		Yaw_Angle = fmod((int)Yaw_Angle+270,360); 	//当前偏航
+//		Pitch_Angle = Pitch_Angle;					//当前俯仰
+//		Solar_Azimuth = Solar_Azimuth;				//目标偏航
+//		Solar_Altitude = Solar_Altitude;			//目标俯仰
+//	if(Pitch_Angle<0){
+//		NVIC_SystemReset();
+//	}
+	//Pitch_Motor_Rigth(101);
+	//Pitch_Motor_Left(60);
+	//Yaw_Motor_Rigth(5);//79
+	//Yaw_Motor_Left(5);//26
 }
 void Control_test(void){
 	uint8_t Yaw_stop = 2;
