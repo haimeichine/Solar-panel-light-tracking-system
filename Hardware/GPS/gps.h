@@ -5,6 +5,7 @@
 #include "math.h"
 #include "stdio.h"
 #include "spa.h"
+
 #define toRadians(degrees) (degrees * pi / 180.0)
 #define pi 	3.14159265358979324
 #define a 	6378245.0
@@ -20,25 +21,16 @@ extern char *date;        					//日期
 extern double GPS_E,GPS_N;					//火星坐标
 extern double Solar_Azimuth;				//太阳方位角
 extern double Solar_Altitude;				//太阳高度角
-extern uint8_t GPS_If;						//是否更新
+extern uint8_t GPS_If;							//是否更新
 extern spa_data spa;
 
 void 	GPS_zhuanhuang(void);
-int 	getAngleDifference(double lon1, double lat1, double lon2, double lat2);
 double 	Complex(double lat1, double lon1, double lat2, double lon2);
 
 ///////////////////太阳方位角
 double 	normalize_angle(double angle);
 double 	myjulian_day(int year, int month, int day, int hour, int minute, int second);
 void 	solar_azimuth_elevation(double lat, double lon, double jd, double *azimuth, double *elevation) ;
-
-//float normalize_angle(float angle);
-
-//float julian_day(int year, int month, int day, int hour, int minute, int second);
-
-//void solar_azimuth_elevation(float lat, float lon, float jd, 
-//                             float *azimuth, float *elevation) ;
-
 
 
 #endif

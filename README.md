@@ -136,7 +136,15 @@ void Yaw_Motor_Auto(void);
 
 **引脚**
 
-GPS————GPIOA；TX=PA2，RX=PA3
+GPS————GPIOA；TX=PA2，RX=PA3///使用的是USART2
+
+
+
+
+
+
+
+## 
 
 
 
@@ -172,17 +180,13 @@ CAN————GPIOA；TX=PA12，RX=PA11
 
 
 
-中断
-
-USART2
 
 
 
 
 
 
-
-
+## Heartbeat.c/h主程序运行在TIM3的更新中断中每秒执行一次
 
 
 

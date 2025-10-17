@@ -1,5 +1,11 @@
 #include "heartbeat.h"
-
+#include "qmc_5883.h"
+#include "my_mpu6050.h"
+#include "can.h"
+#include "motor_pwm.h"
+#include "control.h"
+#include <string.h>
+#include <stdlib.h>
 
 void HeartBeat(void){
 	/*开启时钟*/
@@ -43,13 +49,7 @@ void HeartBeat(void){
 	/*TIM使能*/
 	TIM_Cmd(TIM3, ENABLE);			//使能TIM2，定时器开始运行
 }
-#include "qmc_5883.h"
-#include "my_mpu6050.h"
-#include "can.h"
-#include "motor_pwm.h"
-#include "control.h"
-#include <string.h>
-#include <stdlib.h>
+
 static char mytestbuff[100] = {"$GNRMC,021700.000,A,2424.35173,N,10931.91035,E,15.96,225.84,230725,,,A*4A"};//学校
 int my_h = 6;
 int my_m = 0;
@@ -59,38 +59,39 @@ void TIM3_IRQHandler(void)
 {
 	if (TIM_GetITStatus(TIM3, TIM_IT_Update) != 0)
 	{	
-		TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
-		///
-		if(zg_return){
-			my_h = 6;
-			my_m = 0;
-		}else{
-			if(my_m == 60){
-				my_m = 0;
-				if(my_h >= 18){
-					my_h = 6;
-					zg_return = 1;
-				}
-				if (my_h>24){
-					my_h = 0;
-				}else{
-					my_h++;
-				}
-			}else{
-				my_m += 5;
-			}
-		}
+		TIM_ClearITPendingBit(TIM3, TIM_IT_Update);//清除更新中断标志位
 		/*获取数据*/
 		MPU6050_Get_Angles(&Pitch_Angle); 				//获取当前太阳能板的俯仰，方位
 		QMC5883_Get_Yaw_Angles(&Yaw_Angle);
-//		USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);	//开启中断获取GPS高度角，方位角
-		
-		
+		USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);	//开启中断获取GPS高度角，方位角
 		
 		/*控制*/
-//		Control_Gps();
-//		Get_Can_ADC_Data();
-		char copy[100];
+		
+//		Get_Can_ADC_Data();//方案一，见README.md
+		Control_Gps();//方案二，见README.md
+	/*		
+		Control_test();//东盟展示案例
+		
+			if(zg_return){
+				my_h = 6;
+				my_m = 0;
+			}else{
+				if(my_m == 60){
+					my_m = 0;
+					if(my_h >= 18){
+						my_h = 6;
+						zg_return = 1;
+					}
+					if (my_h>24){
+						my_h = 0;
+					}else{
+						my_h++;
+					}
+				}else{
+					my_m += 5;
+				}
+			}
+			char copy[100];
 		strcpy(copy, mytestbuff);
 		char *fields[20];  				// 存储每一段
 		int i = 0;
@@ -122,21 +123,18 @@ void TIM3_IRQHandler(void)
 		spa_calculate(&spa); 	//计算太阳方位角，高度角
 		Solar_Azimuth = spa.azimuth;		//太阳方位角
 		Solar_Altitude = 90.0 - spa.zenith;	//太阳高度角
-		
-		
-		
+			
+		*/
 		
 		/*变量*/
 		Yaw_Angle = fmod((int)Yaw_Angle+270,360); 	//当前偏航
-		Pitch_Angle = Pitch_Angle;					//当前俯仰
-		Solar_Azimuth = Solar_Azimuth;				//目标偏航
-		Solar_Altitude = Solar_Altitude;			//目标俯仰
+		Pitch_Angle = Pitch_Angle;									//当前俯仰
+		Solar_Azimuth = Solar_Azimuth;							//目标偏航
+		Solar_Altitude = Solar_Altitude;						//目标俯仰
 		
 		
 		
-		
-		
-		Control_test();
+		(void)mytestbuff;
 		
 		/*监视*/
 		printf("目标高度：%-2d°----目标方位角度：%d°\n",(int)Solar_Altitude,(int)Solar_Azimuth);
@@ -154,8 +152,8 @@ void TIM3_IRQHandler(void)
 //    Control_Photosensitive();
 //		Pitch_Motor_Rigth(80);
 //		Pitch_Motor_Left(Pitch_SPEED);
-		//Yaw_Motor_Rigth(5);
-		//Yaw_Motor_Left(Pitch_SPEED);
+//			Yaw_Motor_Rigth(5);
+//			Yaw_Motor_Left(Pitch_SPEED);
 		
 	}
 }
